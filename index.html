@@ -1,0 +1,15 @@
+<!DOCTYPE html><meta charset=utf-8><title>Snake</title>
+<style>body{background:#111;color:#eee;font-family:system-ui;text-align:center}canvas{background:#1d2433;border:2px solid #444}</style>
+<h1>Snake</h1><p id=s>Score: 0 · Arrow keys to move</p><canvas id=c width=400 height=400></canvas>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d'),N=20,S=20;
+let sn,d,f,sc;
+function reset(){sn=[{x:10,y:10}];d={x:1,y:0};sc=0;food()}
+function food(){f={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}
+addEventListener('keydown',e=>{const k={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(k&&(k[0]!==-d.x||k[1]!==-d.y)){d={x:k[0],y:k[1]};e.preventDefault()}});
+function tick(){const h={x:sn[0].x+d.x,y:sn[0].y+d.y};
+if(h.x<0||h.y<0||h.x>=N||h.y>=N||sn.some(p=>p.x===h.x&&p.y===h.y)){reset();return}
+sn.unshift(h);if(h.x===f.x&&h.y===f.y){sc++;food()}else sn.pop();draw()}
+function draw(){x.clearRect(0,0,400,400);x.fillStyle='#ff5d5d';x.fillRect(f.x*S,f.y*S,S-2,S-2);x.fillStyle='#6be675';sn.forEach(p=>x.fillRect(p.x*S,p.y*S,S-2,S-2));document.getElementById('s').textContent='Score: '+sc+' · Arrow keys to move'}
+reset();setInterval(tick,110);
+</script>
